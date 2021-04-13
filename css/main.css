@@ -141,6 +141,22 @@ a {
   background-color: chocolate;
 }
 
+.sticky-ele {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+}
+
+/* body id에 따라 텍스트 요소 처리 */
+#show-scene-0 #scroll-section-0 .sticky-ele,
+#show-scene-1 #scroll-section-1 .sticky-ele,
+#show-scene-2 #scroll-section-2 .sticky-ele,
+#show-scene-3 #scroll-section-3 .sticky-ele {
+  display: block;
+}
+
 @media (min-width: 1024px) {
   #scroll-section-0 h1 {
     font-size: 9vw;
