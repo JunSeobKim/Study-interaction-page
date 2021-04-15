@@ -1,4 +1,9 @@
 const sectionInfo = () => {
+
+    let yOffset = 0; // window.pageYOffset 대신
+    let prevScrollHeight = 0; // 현재 스크롤 위치(yOffset)보다 이전에 위치한 스크롤 섹션들의 스크롤 높이값의 합
+    let currentScene = 0; // 현재 활성화된(눈 앞에 보고있는) 씬(scroll-section)
+
     const sceneInfo = [
         {
             // 0 section
@@ -47,7 +52,28 @@ const sectionInfo = () => {
         console.log(sceneInfo)
     }
 
+    const scrollLoop = () => {
+        prevScrollHeight = 0;
+        for (let i = 0; i < currentScene; i++) {
+            prevScrollHeight += sceneInfo[i].scrollHeight;
+        }
+
+        // 현재 스크롤 위치가 이전 scene들의 합 + 현재 scene 보다 커지면 다음 scene으로 넘어간다.
+        if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
+            currentScene++;
+        }
+        if (yOffset < prevScrollHeight) {
+            currentScene--;
+        }
+        console.log(currentScene)
+        
+    }
+
     window.addEventListener('resize', setLayout);
+    window.addEventListener('scroll', () => {
+        yOffset = window.pageYOffset; // 현재 스크롤 값
+        scrollLoop();
+    });
 
     setLayout();
 }
