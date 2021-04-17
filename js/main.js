@@ -49,7 +49,19 @@ const sectionInfo = () => {
             i.scrollHeight = i.heightNum * window.innerHeight;
             i.obj.container.style.height = `${i.scrollHeight}px`;
         }
-        console.log(sceneInfo)
+        console.log(sceneInfo);
+
+        // 새로고침시 body id 계산
+        yOffset = window.pageYOffset;
+        let totalScrollHeight = 0;
+        for(let i = 0; i < sceneInfo.length; i++) {
+            totalScrollHeight += sceneInfo[i].scrollHeight;
+            if(totalScrollHeight >= yOffset) {
+                currentScene = i;
+                break;
+            }
+        }
+        document.body.setAttribute('id',`show-scene-${currentScene}`);
     }
 
     const scrollLoop = () => {
@@ -61,19 +73,23 @@ const sectionInfo = () => {
         // 현재 스크롤 위치가 이전 scene들의 합 + 현재 scene 보다 커지면 다음 scene으로 넘어간다.
         if (yOffset > prevScrollHeight + sceneInfo[currentScene].scrollHeight) {
             currentScene++;
+            document.body.setAttribute('id',`show-scene-${currentScene}`);
         }
         if (yOffset < prevScrollHeight) {
+            if (currentScene === 0) return; // 브라우저 바운스 효과로 마이너스 방지(모바일)
             currentScene--;
+            document.body.setAttribute('id',`show-scene-${currentScene}`);
         }
-        console.log(currentScene)
+
         
     }
 
-    window.addEventListener('resize', setLayout);
     window.addEventListener('scroll', () => {
         yOffset = window.pageYOffset; // 현재 스크롤 값
         scrollLoop();
     });
+    window.addEventListener('load',setLayout);
+    window.addEventListener('resize', setLayout);
 
     setLayout();
 }
